@@ -5,8 +5,13 @@ import fs from "fs";
 
 const app = express();
 
-// CORS paling permisif - untuk testing dulu
-app.use(cors());
+// Simple CORS - allow all for now
+app.use(cors({
+  origin: true, // Allow all origins
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use("/outputs", express.static("outputs"));
 app.use("/uploads", express.static("uploads"));
