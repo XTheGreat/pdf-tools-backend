@@ -5,16 +5,30 @@ import fs from "fs";
 
 const app = express();
 
+// Gunakan function untuk lebih fleksibel
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://pdf-tools-one-gamma.vercel.app',
-    'https://pdf-tools-gql2sjpdq-xthegreats-projects.vercel.app',
-    /^https:\/\/pdf-tools-.*\.vercel\.app$/,
-    process.env.FRONTEND_URL || '*'
-  ],
-  credentials: true
+  origin: function(origin, callback) {
+    // Izinkan request tanpa origin (mobile app, Postman, etc)
+    if (!origin) return callback(null, true);
+    
+    // Daftar allowed origins
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://pdf-tools-one-gamma.vercel.app'
+    ];
+    
+    // Cek apakah origin ada di list ATAU mengandung 'vercel.app'
+    if (allowedOrigins.includes(origin) || origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+    
+    // Jika tidak match, tetap izinkan (untuk development)
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use("/outputs", express.static("outputs"));
