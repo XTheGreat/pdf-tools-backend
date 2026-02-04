@@ -9,6 +9,9 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:3000',
+    'https://pdf-tools-one-gamma.vercel.app',
+    'https://pdf-tools-gql2sjpdq-xthegreats-projects.vercel.app',
+    /^https:\/\/pdf-tools-.*\.vercel\.app$/,
     process.env.FRONTEND_URL || '*'
   ],
   credentials: true
