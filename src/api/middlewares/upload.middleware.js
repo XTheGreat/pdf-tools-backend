@@ -12,6 +12,12 @@ export const streamUpload = (req, res, next) => {
   }
 
   let filePath = null
+  const fields = {}
+
+  busboy.on("field", (fieldname, value) => {
+    fields[fieldname] = value
+    console.log(`📝 Field received: ${fieldname} = ${value}`)
+  })
 
   busboy.on("file", (name, file, info) => {
     const filename = `${randomUUID()}-${info.filename}`
@@ -23,6 +29,14 @@ export const streamUpload = (req, res, next) => {
 
   busboy.on("finish", () => {
     req.filePath = filePath
+    req.body = fields
+    
+    console.log(`Upload finished:`, {
+      filePath,
+      type: fields.type,
+      quality: fields.quality
+    })
+    
     next()
   })
 

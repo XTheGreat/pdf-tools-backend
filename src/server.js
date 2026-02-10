@@ -5,9 +5,8 @@ import fs from "fs";
 
 const app = express();
 
-// Simple CORS - allow all for now
 app.use(cors({
-  origin: true, // Allow all origins
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

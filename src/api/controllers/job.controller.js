@@ -7,19 +7,28 @@ import path from "path";
 export function createJobHandler(req, res) {
   const jobId = uuid();
   const type = req.body.type || "office-to-pdf";
+  const quality = req.body.quality || "ebook";
+
+  console.log(`Creating job:`, {
+    jobId,
+    type,
+    quality,
+    qualityType: typeof quality
+  })
 
   const job = {
     jobId,
     type,
+    quality,
     status: "queued",
     progress: 0,
-    filePath: req.file.path,
+    filePath: req.file?.path || req.filePath,
   };
 
   createJob(job);
   addJob(job);
 
-  res.json({ jobId, status: "queued", type });
+  res.json({ jobId, status: "queued", type, quality });
 }
 
 export function getJobStatus(req, res) {
